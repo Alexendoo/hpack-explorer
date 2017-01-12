@@ -1,18 +1,21 @@
 'use strict'
 
+import huffman from './huffman'
+
 /**
  * http://httpwg.org/specs/rfc7541.html#integer.representation
  *
  * @param {number} prefix
  * @param {number} value
+ * @param {number} [carry=0]
  * @returns {number[]}
  */
-export function integer(prefix, value) {
+export function integer(prefix, value, carry = 0) {
   const max = Math.pow(2, prefix) - 1
 
-  if (value < max) return [value]
+  if (value < max) return [value ^ carry]
 
-  const out = [max]
+  const out = [max ^ carry]
   value -= max
   while (value >= 128) {
     out.push(value % 128 + 128)
@@ -27,12 +30,16 @@ export function integer(prefix, value) {
  * http://httpwg.org/specs/rfc7541.html#string.literal.representation
  *
  * @param {string} str
- * @param {boolean} [huffman=true]
+ * @param {boolean} [encoded=true]
  * @returns {number[]}
  */
-export function string(str, huffman = true) {
-  if (huffman) {
-
+export function string(str, encoded = true) {
+  if (encoded) {
+    const enc = huffman(str)
+    return [
+      ...integer(7, enc.length / 8, 128),
+      ...enc.match(/.{8}/g).map(byte => parseInt(byte, 2))
+    ]
   } else {
     return [
       ...integer(7, str.length),
