@@ -1,0 +1,29 @@
+{
+  "name": "hpack-explorer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava",
+    "test:watch": "ava --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alexendoo/hpack-explorer.git"
+  },
+  "author": "Alex Macleod <alex@macleod.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Alexendoo/hpack-explorer/issues"
+  },
+  "homepage": "https://github.com/Alexendoo/hpack-explorer#readme",
+  "devDependencies": {
+    "ava": "^0.17.0"
+  },
+  "ava": {
+    "require": "babel-register"
+  },
+  "babel": {
+    "presets": ["es2015-node4"]
+  }
+}
