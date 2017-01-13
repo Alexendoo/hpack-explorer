@@ -279,4 +279,3 @@ export default function huffman(str) {
 
   return out
 }
-
