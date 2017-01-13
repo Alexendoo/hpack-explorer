@@ -37,8 +37,8 @@ export function string(str, encoded = true) {
   if (encoded) {
     const enc = huffman(str)
     return [
-      ...integer(7, enc.length / 8, 128),
-      ...enc.match(/.{8}/g).map(byte => parseInt(byte, 2))
+      ...integer(7, enc.length, 128),
+      ...enc
     ]
   } else {
     return [

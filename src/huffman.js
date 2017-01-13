@@ -262,7 +262,7 @@ const huffmanCode = [
 
 /**
  * @param {string} str
- * @returns {string}
+ * @returns {number[]}
  */
 export default function huffman(str) {
   let out = ''
@@ -277,5 +277,5 @@ export default function huffman(str) {
     out += '1'
   }
 
-  return out
+  return out.match(/.{8}/g).map(byte => parseInt(byte, 2))
 }
