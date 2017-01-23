@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build:watch": "webpack-dev-server",
     "test": "ava",
     "test:watch": "ava --watch"
   },
@@ -18,12 +19,16 @@
   },
   "homepage": "https://github.com/Alexendoo/hpack-explorer#readme",
   "devDependencies": {
-    "ava": "^0.17.0"
+    "ava": "^0.17.0",
+    "babel-loader": "^6.2.10",
+    "babel-plugin-transform-react-jsx": "^6.22.0",
+    "babel-preset-env": "^1.1.8",
+    "html-webpack-plugin": "^2.26.0",
+    "preact": "^7.1.0",
+    "webpack": "beta",
+    "webpack-dev-server": "^1.16.2"
   },
   "ava": {
     "require": "babel-register"
-  },
-  "babel": {
-    "presets": ["es2015-node4"]
   }
 }
