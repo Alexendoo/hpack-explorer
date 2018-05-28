@@ -1,5 +1,3 @@
-'use strict'
-
 import { IndexTable, has } from './index-table'
 import { integer, string } from './primitives'
 
@@ -30,5 +28,7 @@ export function header(name, value, table) {
         ...string(name),
         ...string(value)
       ]
+    default:
+      throw new Error('never')
   }
 }

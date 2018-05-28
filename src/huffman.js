@@ -1,5 +1,3 @@
-'use strict'
-
 // http://httpwg.org/specs/rfc7541.html#huffman.code
 const huffmanCode = [
   '1111111111000',

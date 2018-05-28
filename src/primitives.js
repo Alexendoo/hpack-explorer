@@ -1,5 +1,3 @@
-'use strict'
-
 import huffman from './huffman'
 
 /**

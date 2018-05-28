@@ -1,12 +1,11 @@
 {
   "name": "hpack-explorer",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "build:watch": "webpack-dev-server",
-    "test": "ava",
-    "test:watch": "ava --watch"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test"
   },
   "repository": {
     "type": "git",
@@ -18,17 +17,9 @@
     "url": "https://github.com/Alexendoo/hpack-explorer/issues"
   },
   "homepage": "https://github.com/Alexendoo/hpack-explorer#readme",
-  "devDependencies": {
-    "ava": "^0.17.0",
-    "babel-loader": "^6.2.10",
-    "babel-plugin-transform-react-jsx": "^6.22.0",
-    "babel-preset-env": "^1.1.8",
-    "html-webpack-plugin": "^2.26.0",
-    "preact": "^7.1.0",
-    "webpack": "beta",
-    "webpack-dev-server": "^1.16.2"
-  },
-  "ava": {
-    "require": "babel-register"
+  "dependencies": {
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "react-scripts": "^1.1.4"
   }
 }

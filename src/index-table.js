@@ -1,5 +1,3 @@
-'use strict'
-
 // http://httpwg.org/specs/rfc7541.html#static.table.definition
 export const staticTable = [
   [':authority'],

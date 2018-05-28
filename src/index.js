@@ -1,9 +1,10 @@
-import { h, render, Component } from 'preact'
+import React from 'react'
+import ReactDOM from "react-dom";
 
 import { header } from './header'
 import { IndexTable } from './index-table'
 
-class Headers extends Component {
+class Headers extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -48,8 +49,9 @@ class Headers extends Component {
   }
 }
 
-class HexDump extends Component {
-  render({headers}) {
+class HexDump extends React.Component {
+  render() {
+    const {headers} = this.props
     const table = new IndexTable()
 
     const sections = []
@@ -74,16 +76,16 @@ class HexDump extends Component {
   }
 }
 
-class ByteSegment extends Component {
-  render({name, value, bytes}) {
+class ByteSegment extends React.Component {
+  render() {
     return (
       <div>
-        <div>{name}</div>
-        <div>{value}</div>
-        <div>{JSON.stringify(bytes)}</div>
+        <div>{this.props.name}</div>
+        <div>{this.props.value}</div>
+        <div>{JSON.stringify(this.props.bytes)}</div>
       </div>
     )
   }
 }
 
-render(<Headers />, document.body)
+ReactDOM.render(<Headers />, document.getElementById("app"))
