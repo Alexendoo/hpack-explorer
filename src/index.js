@@ -1,8 +1,6 @@
 import React from 'react'
-import ReactDOM from "react-dom";
-
+import ReactDOM from 'react-dom'
 import { header } from './header'
-import { IndexTable } from './index-table'
 
 class Headers extends React.Component {
   constructor(props) {
@@ -80,7 +78,7 @@ class HexDump extends React.Component {
   }
 }
 
-class ByteSegment extends React.Component {
+class ByteSegment extends React.PureComponent {
   render() {
     return (
       <div>

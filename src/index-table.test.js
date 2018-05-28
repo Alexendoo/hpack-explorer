@@ -1,47 +1,47 @@
-import { IndexTable, has } from '../src/index-table'
+import { staticTable, lookup, has } from '../src/index-table'
 
 it('finds entries from the static table', () => {
-  const table = new IndexTable()
-  expect(
-    table.lookup(':method', 'GET')
-  ).toEqual(
-    [has.BOTH, 2]
-  )
-  expect(
-    table.lookup('content-type', 'application/json')
-  ).toEqual(
-    [has.NAME, 31]
-  )
-  expect(
-    table.lookup('x-cache-miss', 'true')
-  ).toEqual(
-    [has.NEITHER, 0]
-  )
+  let ret = lookup(staticTable, ':method', 'GET')
+
+  expect(ret.table).toEqual(staticTable)
+  expect(ret.has).toBe(has.BOTH)
+  expect(ret.index).toBe(2)
+
+  ret = lookup(staticTable, 'content-type', 'application/json')
+
+  expect(ret.has).toBe(has.NAME)
+  expect(ret.index).toBe(31)
+
+  ret = lookup(staticTable, 'x-cache-miss', 'true')
+
+  expect(ret.has).toBe(has.NEITHER)
+  expect(ret.index).toBeFalsy()
 })
 
 it('inserts entries into the dynamic table', () => {
-  const table = new IndexTable()
-  expect(
-    table.lookup('foo', 'bar')
-  ).toEqual(
-    [has.NEITHER, 0]
-  )
-  expect(
-    table.lookup('foo', 'bar')
-  ).toEqual(
-    [has.BOTH, 62]
-  )
-  expect(
-    table.lookup('content-type', 'application/json')
-  ).toEqual(
-    [has.NAME, 31]
-  )
-  expect(
-    table.getDynamicTable()
-  ).toEqual(
-    [
-      ['foo', 'bar'],
-      ['content-type', 'application/json']
-    ]
-  )
+  let ret = lookup(staticTable, 'foo', 'bar')
+
+  expect(ret.table.pop()).toEqual(staticTable)
+  expect(ret.has).toBe(has.NEITHER)
+
+  ret = lookup(ret.table, 'foo', 'bar')
+
+  expect(ret.table.pop()).toEqual(staticTable)
+  expect(ret.has).toBe(has.BOTH)
+  expect(ret.index).toBe(62)
+
+  ret = lookup(ret.table, 'content-type', 'application/json')
+
+  expect(ret.has).toBe(has.NAME)
+  expect(ret.index).toBe(31)
+
+  ret = lookup(ret.table, 'content-type', 'application/json')
+
+  expect(ret.has).toBe(has.BOTH)
+  expect(ret.index).toBe(62)
+
+  ret = lookup(ret.table, 'foo', 'bar')
+
+  expect(ret.has).toBe(has.BOTH)
+  expect(ret.index).toBe(63)
 })

@@ -1,4 +1,4 @@
-import { has } from './index-table'
+import { has, lookup } from './index-table'
 import { integer, string } from './primitives'
 
 /**
@@ -9,25 +9,33 @@ import { integer, string } from './primitives'
  *
  * @param {string} name e.g. content-type
  * @param {string} value e.g. text/plain
- * @param {IndexTable} table http://httpwg.org/specs/rfc7541.html#indexing.tables
- * @returns {number[]} binary representation
+ * @param {List<string[]>} table http://httpwg.org/specs/rfc7541.html#indexing.tables
  */
-export function header(name, value, table) {
-  const [result, index] = table.lookup(name, value)
-  switch (result) {
+export function header(table, name, value) {
+  const ret = lookup(table, name, value)
+  switch (ret.has) {
     case has.BOTH:
-      return integer(7, index, 128)
+      return {
+        bytes: integer(7, ret.index, 128),
+        table: ret.table
+      }
     case has.NAME:
-      return [
-        ...integer(6, index, 64),
-        ...string(value)
-      ]
+      return {
+        bytes: [
+          ...integer(6, ret.index, 64),
+          ...string(value)
+        ],
+        table: ret.table
+      }
     case has.NEITHER:
-      return [
-        64,
-        ...string(name),
-        ...string(value)
-      ]
+      return {
+        bytes: [
+          64,
+          ...string(name),
+          ...string(value)
+        ],
+        table: ret.table
+      }
     default:
       throw new Error('never')
   }

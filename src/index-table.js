@@ -1,5 +1,9 @@
+import { List } from 'immutable'
+
 // http://httpwg.org/specs/rfc7541.html#static.table.definition
-export const staticTable = [
+export const staticTable = List([
+  // no entry at index 0
+  [],
   [':authority'],
   [':method', 'GET'],
   [':method', 'POST'],
@@ -61,7 +65,7 @@ export const staticTable = [
   ['vary'],
   ['via'],
   ['www-authenticate']
-]
+])
 
 /**
  * @readonly
@@ -73,71 +77,58 @@ export const has = {
   NEITHER: 0,
 }
 
-export class IndexTable {
-  /**
-   * create an IndexTable
-   */
-  constructor() {
-    this.table = staticTable.slice(0)
-    this.staticLength = staticTable.length
-  }
+/**
+ * looks for a header field in the table, creating a new
+ * field in the dynamic table if missing
+ *
+ * @param {List<string[]>} table
+ * @param {string} name
+ * @param {string} value
+ */
+export function lookup(table, name, value) {
+  let partial;
 
-  /**
-   * insert a new header field into the dynamic table
-   *
-   * @param {string} name
-   * @param {string} value
-   */
-  push(name, value) {
-    this.table.push([name, value])
-  }
-
-  /**
-   * looks for a header field in the table, creating a new
-   * field in the dynamic table if missing
-   *
-   * @param {string} name
-   * @param {string} value
-   * @returns {[number, number]} a tuple -
-   * [
-   *   if the table {@link has} the name + value, name or neither,
-   *   index of the record in the table
-   * ]
-   */
-  lookup(name, value) {
-    for (let i = 0; i < this.table.length; i++) {
-      const [lookupName, lookupValue] = this.table[i]
-      if (lookupName === name) {
-        if (lookupValue === value) {
-          return [has.BOTH, i + 1]
+  for (let index = 1; index < table.size; index++) {
+    const [lookupName, lookupValue] = table.get(index)
+    if (lookupName === name) {
+      if (lookupValue === value) {
+        return {
+          table,
+          has: has.BOTH,
+          index
         }
+      }
 
-        this.push(name, value)
-        return [has.NAME, i + 1]
+      if (partial === undefined) {
+        partial = {
+          has: has.NAME,
+          index
+        }
       }
     }
-    this.push(name, value)
-    return [has.NEITHER, 0]
   }
 
-  /**
-   * get a header field by index
-   *
-   * @param {number} number
-   * @returns {[string, string]} a tuple -
-   * [
-   *   name,
-   *   value - optional
-   * ]
-   */
-  index(number) {
-    return this.table[number + 1]
+  if (partial !== undefined) {
+    return {
+      table: insert(table, name, value),
+      ...partial
+    }
   }
 
-  /**
-   * @returns {[string, string][]} an array of [name, value] pairs
-   */
-  getDynamicTable() {
-    return this.table.slice(this.staticLength)
+  return {
+    table: insert(table, name, value),
+    has: has.NEITHER,
+    index: null
   }
+}
+
+/**
+ * Insert an entry (name, value) into the table
+ *
+ * @param {List<string[]>} table
+ * @param {string} name
+ * @param {string} value
+ */
+function insert(table, name, value) {
+  return table.insert(staticTable.size, [name, value])
 }

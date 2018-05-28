@@ -1,5 +1,4 @@
 import { bytes } from './_helpers'
-
 import { integer, string } from '../src/primitives'
 
 it('encodes integers', () => {
