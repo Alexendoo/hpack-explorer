@@ -13,13 +13,17 @@ class Headers extends React.Component {
   }
 
   updateKey(event, index) {
-    this.state.headers[index][0] = event.target.value
-    this.setState()
+    const headers = this.state.headers.slice()
+    headers[index][0] = event.target.value
+
+    this.setState({headers})
   }
 
   updateValue(event, index) {
-    this.state.headers[index][1] = event.target.value
-    this.setState()
+    const headers = this.state.headers.slice()
+    headers[index][1] = event.target.value
+
+    this.setState({headers})
   }
 
   componentWillUpdate() {

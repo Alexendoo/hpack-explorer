@@ -1,9 +1,9 @@
-import { IndexTable, has } from './index-table'
+import { has } from './index-table'
 import { integer, string } from './primitives'
 
 /**
  * converts a HTTP header to its binary representation, stores
- * lookups in the provided {@link IndexTable}
+ * lookups in the provided IndexTable
  *
  * http://httpwg.org/specs/rfc7541.html#detailed.format
  *
