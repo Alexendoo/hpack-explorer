@@ -2,82 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { staticTable } from './index-table';
 import { List } from 'immutable';
-
-// class Headers extends React.Component {
-//   constructor(props) {
-//     super(props)
-//     this.state = {
-//       headers: [['', '']]
-//     }
-//   }
-
-//   updateKey(event, index) {
-//     const headers = this.state.headers.slice()
-//     headers[index][0] = event.target.value
-
-//     this.setState({headers})
-//   }
-
-//   updateValue(event, index) {
-//     const headers = this.state.headers.slice()
-//     headers[index][1] = event.target.value
-
-//     this.setState({headers})
-//   }
-
-//   componentWillUpdate() {
-//     const last = this.state.headers[this.state.headers.length - 1]
-//     if (last[0]) this.state.headers.push(['', ''])
-
-//     for (let i = 0; i < this.state.headers.length - 1; i++) {
-//       const [key, value] = this.state.headers[i]
-//       if (!key && !value) this.state.headers.splice(i, 1)
-//     }
-//   }
-
-//   render() {
-//     return (
-//       <div>
-//         {
-//           this.state.headers.map((header, index) => (
-//             <div>
-//               <input value={header[0]} onInput={e => this.updateKey(e, index)} />
-//               <input value={header[1]} onInput={e => this.updateValue(e, index)} />
-//             </div>
-//           ))
-//         }
-//         <HexDump headers={this.state.headers} />
-//       </div>
-//     )
-//   }
-// }
-
-// class HexDump extends React.Component {
-//   render() {
-//     const {headers} = this.props
-//     const table = new IndexTable()
-
-//     const sections = []
-//     for (let i = 0; i < headers.length; i++) {
-//       const name = headers[i][0]
-//       const value = headers[i][1]
-//       if (!name || !value) continue
-
-//       sections.push(
-//         <ByteSegment
-//           name={name}
-//           value={value}
-//           bytes={header(name, value, table)} />
-//       )
-//     }
-
-//     return (
-//       <div>
-//         {sections}
-//       </div>
-//     )
-//   }
-// }
+import { header } from './header';
 
 class Headers extends React.PureComponent {
   constructor(props) {
@@ -120,26 +45,47 @@ class Headers extends React.PureComponent {
   }
 
   render() {
-    return this.state.headers.map(([name, value], index) =>
-      <div>
+    const headers = this.state.headers
+
+    const headerTable = headers.map(([name, value], index) =>
+      <div key={index}>
         <div>
           <input value={name} onInput={e => this.updateName(e, index)} />
           <input value={value} onInput={e => this.updateValue(e, index)} />
         </div>
       </div>
     )
+
+    return (
+      <main>
+        <a href="https://http2.github.io/http2-spec/compression.html">Spec</a>
+
+        {headerTable}
+
+        <HexDump headers={headers.filter(h => h.every(Boolean))} />
+      </main>
+    )
   }
 }
 
-class ByteSegment extends React.PureComponent {
+class HexDump extends React.PureComponent {
   render() {
-    return (
-      <div>
-        <div>{this.props.name}</div>
-        <div>{this.props.value}</div>
-        <div>{JSON.stringify(this.props.bytes)}</div>
-      </div>
-    )
+    /** @type {List<string[]>} */
+    const headers = this.props.headers
+
+    let table = staticTable
+
+    return headers.map(([name, value], index) => {
+      const ret = header(table, name, value)
+
+      table = ret.table
+
+      return (
+        <div key={index}>
+          {name}/{value}: {ret.bytes.map(b => b.toString(16))}
+        </div>
+      )
+    })
   }
 }
 
