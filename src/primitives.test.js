@@ -1,5 +1,5 @@
 import { bytes } from './_helpers'
-import { integer, string } from '../src/primitives'
+import { integer, string } from './primitives'
 
 it('encodes integers', () => {
   // http://httpwg.org/specs/rfc7541.html#integer.representation.examples

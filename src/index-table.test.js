@@ -1,4 +1,4 @@
-import { staticTable, lookup, has } from '../src/index-table'
+import { staticTable, lookup, has } from './index-table'
 
 it('finds entries from the static table', () => {
   let ret = lookup(staticTable, ':method', 'GET')
