@@ -1,5 +1,5 @@
 import { bytes } from "./_helpers";
-import { header } from "./header";
+import { header, buildTables } from "./header";
 import { staticTable } from "./index-table";
 
 it("encodes fully indexed headers", () => {
@@ -27,3 +27,12 @@ it("encodes non indexed headers", () => {
 		bytes("40 88 25a8 49e9 5ba9 7d7f 89 25a8 49e9 5bb8 e8b4 bf")
 	);
 });
+
+it("encodes whole requests", () => {
+	let tables = buildTables([[{
+		name: "",
+		value: "val"
+	}]]);
+
+	console.log(tables)
+})

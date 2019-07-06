@@ -1,92 +1,55 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { staticTable } from './index-table';
-import { List } from 'immutable';
-import { header } from './header';
+import React, { useState, useCallback } from "react";
+import ReactDOM from "react-dom";
+import { buildTables } from "./header";
 
-class Headers extends React.PureComponent {
-  constructor(props) {
-    super(props)
+function useInput(initial = "") {
+	const [value, setValue] = useState(initial);
 
-    this.state = {
-      table: staticTable,
-      headers: List([['', '']])
-    }
-  }
-
-  update = (name, value, index) => {
-    let headers = this.state.headers
-    const last = headers.size === index + 1
-
-    if (!last && name === "" && value === "") {
-      headers = headers.delete(index)
-    } else {
-      if (last) headers = headers.push(['', ''])
-      headers = headers.set(index, [name, value])
-    }
-
-    this.setState({headers})
-  }
-
-  updateName = (event, index) => {
-    this.update(
-      event.target.value,
-      this.state.headers.get(index)[1],
-      index
-    )
-  }
-
-  updateValue = (event, index) => {
-    this.update(
-      this.state.headers.get(index)[0],
-      event.target.value,
-      index
-    )
-  }
-
-  render() {
-    const headers = this.state.headers
-
-    const headerTable = headers.map(([name, value], index) =>
-      <div key={index}>
-        <div>
-          <input value={name} onInput={e => this.updateName(e, index)} />
-          <input value={value} onInput={e => this.updateValue(e, index)} />
-        </div>
-      </div>
-    )
-
-    return (
-      <main>
-        <a href="https://http2.github.io/http2-spec/compression.html">Spec</a>
-
-        {headerTable}
-
-        <HexDump headers={headers.filter(h => h.every(Boolean))} />
-      </main>
-    )
-  }
+	return [value, event => setValue(event.target.value)];
 }
 
-class HexDump extends React.PureComponent {
-  render() {
-    /** @type {List<string[]>} */
-    const headers = this.props.headers
-
-    let table = staticTable
-
-    return headers.map(([name, value], index) => {
-      const ret = header(table, name, value)
-
-      table = ret.table
-
-      return (
-        <div key={index}>
-          {name}/{value}: {ret.bytes.map(b => b.toString(16))}
-        </div>
-      )
-    })
-  }
+function Request({ headers, previous, onChange }) {
+	return headers.map(v => (
+		<div>
+			name: {v.name}, value: {v.value}
+		</div>
+	));
 }
 
-ReactDOM.render(<Headers />, document.getElementById("app"))
+function reducer(state, action) {}
+
+function App() {
+	const [requests, setRequests] = useState([
+		[
+			{
+				name: "",
+				value: ""
+			}
+		]
+	]);
+
+	const tables = buildTables(requests);
+
+	console.log(tables, requests);
+
+	function updateState(requestIndex, headerIndex, header) {}
+
+	const rs = requests.map((headers, requestIndex) => (
+		<Request
+			headers={headers}
+			onChange={(header, headerIndex) =>
+				updateState(requestIndex, headerIndex, headers)
+			}
+		/>
+	));
+
+	return (
+		<div>
+			<h3>app</h3>
+
+			{rs}
+		</div>
+	);
+}
+
+ReactDOM.render(<App />, document.getElementById("app"));

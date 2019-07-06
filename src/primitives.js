@@ -9,7 +9,7 @@ import huffman from "./huffman";
  * @returns {number[]}
  */
 export function integer(prefix, value, carry = 0) {
-	const max = Math.pow(2, prefix) - 1;
+	const max = 2 ** prefix - 1;
 
 	if (value < max) return [value ^ carry];
 
@@ -32,13 +32,17 @@ export function integer(prefix, value, carry = 0) {
  * @returns {number[]}
  */
 export function string(str, encoded = true) {
+	if (str.length === 0) {
+		return integer(7, 0);
+	}
+
 	if (encoded) {
 		const enc = huffman(str);
 		return [...integer(7, enc.length, 128), ...enc];
-	} else {
-		return [
-			...integer(7, str.length),
-			...str.split("").map(char => char.charCodeAt(0))
-		];
 	}
+
+	return [
+		...integer(7, str.length),
+		...str.split("").map(char => char.charCodeAt(0))
+	];
 }

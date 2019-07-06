@@ -1,7 +1,5 @@
-import { List } from "immutable";
-
 // http://httpwg.org/specs/rfc7541.html#static.table.definition
-export const staticTable = List([
+export const staticTable = [
 	// no entry at index 0
 	[],
 	[":authority"],
@@ -65,7 +63,7 @@ export const staticTable = List([
 	["vary"],
 	["via"],
 	["www-authenticate"]
-]);
+];
 
 /**
  * @readonly
@@ -81,15 +79,15 @@ export const has = {
  * looks for a header field in the table, creating a new
  * field in the dynamic table if missing
  *
- * @param {List<string[]>} table
+ * @param {string[][]} table
  * @param {string} name
  * @param {string} value
  */
 export function lookup(table, name, value) {
 	let partial;
 
-	for (let index = 1; index < table.size; index++) {
-		const [lookupName, lookupValue] = table.get(index);
+	for (let index = 1; index < table.length; index++) {
+		const [lookupName, lookupValue] = table[index];
 		if (lookupName === name) {
 			if (lookupValue === value) {
 				return {
@@ -125,10 +123,10 @@ export function lookup(table, name, value) {
 /**
  * Insert an entry (name, value) into the table
  *
- * @param {List<string[]>} table
+ * @param {string[][]} table
  * @param {string} name
  * @param {string} value
  */
 function insert(table, name, value) {
-	return table.insert(staticTable.size, [name, value]);
+	return [...staticTable, [name, value], ...table.slice(staticTable.length)];
 }

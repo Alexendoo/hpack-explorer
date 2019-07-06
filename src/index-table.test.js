@@ -21,12 +21,12 @@ it("finds entries from the static table", () => {
 it("inserts entries into the dynamic table", () => {
 	let ret = lookup(staticTable, "foo", "bar");
 
-	expect(ret.table.pop()).toEqual(staticTable);
+	expect(ret.table.slice(0, -1)).toEqual(staticTable);
 	expect(ret.has).toBe(has.NEITHER);
 
 	ret = lookup(ret.table, "foo", "bar");
 
-	expect(ret.table.pop()).toEqual(staticTable);
+	expect(ret.table.slice(0, -1)).toEqual(staticTable);
 	expect(ret.has).toBe(has.BOTH);
 	expect(ret.index).toBe(62);
 
