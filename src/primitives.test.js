@@ -53,5 +53,5 @@ it("encodes strings with huffman encoding", () => {
 });
 
 it("encodes an empty string", () => {
-	expect(string("")).toEqual(bytes("00"))
+	expect(string("", false)).toEqual(bytes("00"))
 })

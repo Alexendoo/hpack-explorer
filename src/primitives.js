@@ -32,10 +32,6 @@ export function integer(prefix, value, carry = 0) {
  * @returns {number[]}
  */
 export function string(str, encoded = true) {
-	if (str.length === 0) {
-		return integer(7, 0);
-	}
-
 	if (encoded) {
 		const enc = huffman(str);
 		return [...integer(7, enc.length, 128), ...enc];

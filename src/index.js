@@ -32,13 +32,28 @@ function App() {
 
 	console.log(tables, requests);
 
-	function updateState(requestIndex, headerIndex, header) {}
+	function updateState(requestIndex, headerIndex, header) {
+		setRequests(requests => {
+			const headers = requests[requestIndex];
+
+			return [
+				...requests.slice(0, requestIndex),
+				[
+					...headers.slice(0, headerIndex),
+					header,
+					...headers.slice(headerIndex + 1),
+				],
+				...requests.slice(requestIndex + 1)
+			];
+		});
+	}
 
 	const rs = requests.map((headers, requestIndex) => (
 		<Request
+			key={requestIndex}
 			headers={headers}
 			onChange={(header, headerIndex) =>
-				updateState(requestIndex, headerIndex, headers)
+				updateState(requestIndex, headerIndex, header)
 			}
 		/>
 	));

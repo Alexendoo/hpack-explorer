@@ -263,6 +263,10 @@ const huffmanCode = [
  * @returns {number[]}
  */
 export default function huffman(str) {
+	if (str.length === 0) {
+		return "";
+	}
+
 	let out = "";
 	for (let i = 0; i < str.length; i++) {
 		const charCode = str.charCodeAt(i);

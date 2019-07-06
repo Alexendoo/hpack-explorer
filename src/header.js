@@ -46,7 +46,6 @@ export function buildTables(requests) {
 
 	return requests.map(req =>
 		req.map(({ name, value }) => {
-			console.log(prevTable, name, value);
 			const { bytes, has, table } = header(prevTable, name, value);
 
 			prevTable = table;
